@@ -7,6 +7,8 @@
 </template>
 
 <script>
+    import buildFilterPriceVariant from '../helpers/buildFilterPriceVariant';
+
     export default {
         name: 'CustomPriceSelector',
         data () {
@@ -25,15 +27,8 @@
         },
         methods: {
             applyFilter() {
-                const filterVariant = {
-                    from: this.from,
-                    id: `${this.from}-${this.to}`,
-                    label: `$${this.from} - ${this.to}`,
-                    single: true,
-                    to: this.to,
-                    type: 'price'
-                }
-                this.$store.dispatch('category-next/switchSearchFilters', [filterVariant])
+                const filterVariant = buildFilterPriceVariant(this.from, this.to);
+                this.$store.dispatch('category-next/switchSearchFilters', [ filterVariant ]);
             }
         }
     }

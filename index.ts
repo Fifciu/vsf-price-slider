@@ -3,8 +3,7 @@ import { extendStore } from '@vue-storefront/core/helpers'
 import { getSystemFilterNames } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers';
 import { products } from 'config';
 import { Filters } from '@vue-storefront/core/modules/catalog-next/types/Category';
-
-const repositoryUrl = 'https://github.com/Fifciu/vsf-browser-update';
+import buildFilterPriceVariant from './helpers/buildFilterPriceVariant';
 
 const getFiltersFromQuery = ({ filtersQuery = {}, availableFilters = {} } = {}): { filters: Filters } => {
   const searchQuery = {
@@ -26,17 +25,15 @@ const getFiltersFromQuery = ({ filtersQuery = {}, availableFilters = {} } = {}):
             return
           }
           const [from, to] = singleValue.split('-').map(Number);
-          variant = {
-            from,
-            id: `${from}-${to}`,
-            label: `$${from} - ${to}`,
-            single: true,
-            to,
-            type: 'price'
-          }
+          variant = buildFilterPriceVariant(from, to);
         }
-        if (!Array.isArray(searchQuery.filters[filterKey])) searchQuery.filters[filterKey] = []
-        searchQuery.filters[filterKey].push({ ...variant, attribute_code: filterKey })
+        if (!Array.isArray(searchQuery.filters[filterKey])) {
+          searchQuery.filters[filterKey] = []
+        }
+        searchQuery.filters[filterKey].push({
+          ...variant,
+          attribute_code: filterKey
+        })
       })
     }
   })
