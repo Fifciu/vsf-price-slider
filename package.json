@@ -1,0 +1,22 @@
+{
+  "name": "vsf-price-selector",
+  "version": "1.0.0",
+  "description": "Dynamic price selector for Vue Storefront 1.12+",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fifciu/vsf-price-selector.git"
+  },
+  "author": "Fifciu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fifciu/vsf-price-selector/issues"
+  },
+  "homepage": "https://github.com/Fifciu/vsf-price-selector#readme",
+  "dependencies": {
+    "vue-slider-component": "^3.2.5"
+  }
+}

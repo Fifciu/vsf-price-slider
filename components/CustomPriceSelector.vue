@@ -1,36 +1,23 @@
 <template>
   <div>
     <h2>Price Selector</h2>
-    From: <input type="number" v-model="from"><br>
-    To: <input type="number" v-model="to">
+    <vue-slider v-model="dynamicPrice"/>
   </div>
 </template>
 
 <script>
-    import buildFilterPriceVariant from '../helpers/buildFilterPriceVariant';
+    import applyDynamicPriceFilter from '../mixins/applyDynamicPriceFilter';
+    import VueSlider from 'vue-slider-component'
+    import 'vue-slider-component/theme/antd.css'
 
     export default {
         name: 'CustomPriceSelector',
-        data () {
-            return {
-                from: 0,
-                to: 50
-            }
+        components: {
+            VueSlider
         },
-        watch: {
-            to () {
-                this.applyFilter();
-            },
-            from () {
-                this.applyFilter();
-            }
-        },
-        methods: {
-            applyFilter() {
-                const filterVariant = buildFilterPriceVariant(this.from, this.to);
-                this.$store.dispatch('category-next/switchSearchFilters', [ filterVariant ]);
-            }
-        }
+        mixins: [
+            applyDynamicPriceFilter('dynamicPrice')
+        ]
     }
 </script>
 
