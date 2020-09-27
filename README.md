@@ -7,5 +7,6 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [x] Update Storefront Query Builder to support dynamic price range (for aggregations)
 - [x] Override category-next part in PWA to support dynamic price range
 - [x] Create reusable mixin & Vue component which uses it
-- [ ] Prepare max & min aggregations
+- [x] Prepare max & min aggregations
+- [ ] Aggregations for max & min should be independent from applied price filter
 - [ ] Write unit tests
