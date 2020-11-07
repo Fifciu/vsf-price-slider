@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="price-slider">
     <h2>Price Selector</h2>
       <vue-slider
         v-model="dynamicPrice.values"
@@ -25,6 +25,10 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.price-slider {
+  .vue-slider-dot {
+    z-index: 3;
+  }
+}
 </style>
