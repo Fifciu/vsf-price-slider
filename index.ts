@@ -1,13 +1,12 @@
 import { StorefrontModule } from '@vue-storefront/core/lib/modules';
-import { extendStore } from '@vue-storefront/core/helpers'
+import { buildFilterProductsQuery, extendStore } from '@vue-storefront/core/helpers'
 import { getSystemFilterNames } from '@vue-storefront/core/modules/catalog-next/helpers/filterHelpers';
 import { Filters } from '@vue-storefront/core/modules/catalog-next/types/Category';
 import buildFilterPriceVariant from './helpers/buildFilterPriceVariant';
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types';
-import config from 'config';
 import omit from 'lodash-es/omit';
 import cloneDeep from 'lodash-es/cloneDeep';
-
+import { products, entities } from 'config'
 const PRICE_RANGES_MUTATION = 'PRICE_RANGES_MUTATION';
 
 const getFiltersFromQuery = ({ filtersQuery = {}, availableFilters = {} } = {}): { filters: Filters } => {
@@ -48,8 +47,77 @@ const getFiltersFromQuery = ({ filtersQuery = {}, availableFilters = {} } = {}):
 
 const categoryNextGetters = {
   actions: {
+    async loadCategoryProducts ({ commit, getters, dispatch, rootState }, { route = {path: null}, category = null, pageSize = 50 } = {}) {
+      const searchCategory = category || getters.getCategoryFrom(route.path) || {}
+      const categoryMappedFilters = getters.getFiltersMap[searchCategory.id]
+      const areFiltersInQuery = !!Object.keys(route[products.routerFiltersSource]).length
+      if (!categoryMappedFilters && areFiltersInQuery) { // loading all filters only when some filters are currently chosen and category has no available filters yet
+        await dispatch('loadCategoryFilters', searchCategory)
+      }
+      const searchQuery = getters.getCurrentFiltersFrom(route[products.routerFiltersSource], categoryMappedFilters)
+      let filterQr = buildFilterProductsQuery(searchCategory, searchQuery.filters)
+
+      const requests = []
+      requests.push(dispatch('product/findProducts', {
+        query: filterQr,
+        sort: searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`,
+        includeFields: entities.productList.includeFields,
+        excludeFields: entities.productList.excludeFields,
+        size: pageSize,
+        configuration: searchQuery.filters,
+        options: {
+          populateRequestCacheTags: true,
+          prefetchGroupProducts: false,
+          setProductErrors: false,
+          fallbackToDefaultWhenNoAvailable: true,
+          assignProductConfiguration: false,
+          separateSelectedVariant: false
+        }
+      }, { root: true }))
+
+      if (searchQuery.filters && searchQuery.filters.price) {
+        delete searchQuery.filters.price;
+        requests.push(dispatch('product/findProducts', {
+          query: buildFilterProductsQuery(searchCategory, searchQuery.filters),
+          sort: searchQuery.sort || `${products.defaultSortBy.attribute}:${products.defaultSortBy.order}`,
+          includeFields: entities.productList.includeFields,
+          excludeFields: entities.productList.excludeFields,
+          size: 0,
+          configuration: searchQuery.filters,
+          options: {
+            populateRequestCacheTags: true,
+            prefetchGroupProducts: false,
+            setProductErrors: false,
+            fallbackToDefaultWhenNoAvailable: true,
+            assignProductConfiguration: false,
+            separateSelectedVariant: false
+          }
+        }, { root: true }))
+      }
+
+      const [ originalRequest, rangeLimitsRequest ] = await Promise.all(requests);
+      let aggregations = null;
+      const { items, perPage, start, total, aggregations: originalAggregations, attributeMetadata } = originalRequest;
+      if (rangeLimitsRequest && rangeLimitsRequest.aggregations) {
+        aggregations = rangeLimitsRequest.aggregations;
+      } else {
+        aggregations = originalAggregations;
+      }
+
+      await dispatch('loadAvailableFiltersFrom', {
+        aggregations,
+        attributeMetadata,
+        category: searchCategory,
+        filters: searchQuery.filters
+      })
+      commit(types.CATEGORY_SET_SEARCH_PRODUCTS_STATS, { perPage, start, total })
+      commit(types.CATEGORY_SET_PRODUCTS, items)
+
+      return items
+    },
+
     async loadAvailableFiltersFrom ({ commit, getters, dispatch }, { aggregations, attributeMetadata, category, filters = {} }) {
-      if (config.entities.attribute.loadByAttributeMetadata) {
+      if (entities.attribute.loadByAttributeMetadata) {
         await dispatch('attribute/loadCategoryAttributes', { attributeMetadata }, { root: true })
       }
       const aggregationFilters = getters.getAvailableFiltersFrom(aggregations)
@@ -75,7 +143,7 @@ const categoryNextGetters = {
   },
   getters: {
     getCurrentFiltersFrom: (state, getters, rootState) => (filters, categoryFilters) => {
-      const currentQuery = filters || rootState.route[config.products.routerFiltersSource]
+      const currentQuery = filters || rootState.route[products.routerFiltersSource]
       const availableFilters = categoryFilters || getters.getAvailableFilters
       return getFiltersFromQuery({ availableFilters, filtersQuery: currentQuery })
     }
@@ -88,7 +156,6 @@ const categoryNextGetters = {
   }
 }
 
-export const CustomPriceSelector: StorefrontModule = async ({ appConfig, moduleConfig }) => {
-  // what if i disable price in config?
+export const CustomPriceSelector: StorefrontModule = async () => {
   extendStore('category-next', categoryNextGetters)
 }

@@ -1,11 +1,11 @@
 <template>
   <div>
     <h2>Price Selector</h2>
-    <vue-slider
-      v-model="dynamicPrice.values"
-      :min="minAvailablePrice"
-      :max="maxAvailablePrice"
-    />
+      <vue-slider
+        v-model="dynamicPrice.values"
+        :min="minAvailablePrice"
+        :max="maxAvailablePrice"
+      />
   </div>
 </template>
 
