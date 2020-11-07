@@ -13,14 +13,11 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     }
   },
   watch: {
-    [wrapperKey]: {
-      deep: true,
-      handler () {
-        if (!this[wrapperKey].initialSetupDone) {
-          return
-        }
-        return this.applyFilter();
+    [`${wrapperKey}.values`]() {
+      if (!this[wrapperKey].initialSetupDone) {
+        return
       }
+      return this.applyFilter();
     }
   },
   computed: {
