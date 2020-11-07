@@ -13,7 +13,7 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     }
   },
   watch: {
-    [`${wrapperKey}.values`]() {
+    [`${wrapperKey}.values`] () {
       if (!this[wrapperKey].initialSetupDone) {
         return
       }
