@@ -5,14 +5,16 @@
         v-model="dynamicPrice.values"
         :min="Math.min(minAvailablePrice, dynamicPrice.values[0])"
         :max="Math.max(maxAvailablePrice, dynamicPrice.values[1])"
+        lazy
       />
   </div>
 </template>
 
 <script>
     import applyDynamicPriceFilter from '../mixins/applyDynamicPriceFilter';
-    import VueSlider from 'vue-slider-component'
-    import 'vue-slider-component/theme/antd.css'
+    import VueSlider from 'vue-slider-component/dist-css/vue-slider-component.umd.min.js'
+    import 'vue-slider-component/dist-css/vue-slider-component.css'
+    import 'vue-slider-component/theme/default.css'
 
     export default {
         name: 'CustomPriceSelector',

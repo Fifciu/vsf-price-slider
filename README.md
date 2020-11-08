@@ -1,4 +1,4 @@
-# VSF1 Price Selector
+# VSF1 Price Slider
 ## Requirements
 VSF 1.12+ (or maybe 1.11.5+?)
 
@@ -12,7 +12,8 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [ ] Write unit tests
 - [x] Fix for changing max/min value when value exceeds (partial fix)
 - [ ] Make aggregations min max optional (also in storefront-query-builder)
-- [ ] Rename to price slider
+- [x] Rename to price slider
+- [ ] Make vue slider component lazy
 
 ## Config
 config.priceSlider.fetchRanges

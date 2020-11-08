@@ -6,7 +6,7 @@ import buildFilterPriceVariant from './helpers/buildFilterPriceVariant';
 import * as types from '@vue-storefront/core/modules/catalog-next/store/category/mutation-types';
 import omit from 'lodash-es/omit';
 import cloneDeep from 'lodash-es/cloneDeep';
-import { products, entities, priceSelector } from 'config'
+import { products, entities, priceSlider } from 'config'
 import { priceSliderHooksExecutors } from './hooks';
 const PRICE_RANGES_MUTATION = 'PRICE_RANGES_MUTATION';
 
@@ -75,8 +75,8 @@ const categoryNextGetters = {
           separateSelectedVariant: false
         }
       }, { root: true }))
-      // console.log(priceSelector, 'xd')
-      if (priceSelector.fetchRanges && searchQuery.filters && searchQuery.filters.price) {
+
+      if (priceSlider.fetchRanges && searchQuery.filters && searchQuery.filters.price) {
         delete searchQuery.filters.price;
         requests.push(dispatch('product/findProducts', {
           query: buildFilterProductsQuery(searchCategory, searchQuery.filters),
@@ -132,8 +132,8 @@ const categoryNextGetters = {
       commit(types.CATEGORY_SET_CATEGORY_FILTERS, { category, filters: resultFilters })
 
       const ranges = priceSliderHooksExecutors.beforeSetRanges({
-        min: priceSelector.fetchRanges ? aggregations.agg_min_price.value : priceSelector.constRanges.min,
-        max: priceSelector.fetchRanges ? aggregations.agg_max_price.value : priceSelector.constRanges.max
+        min: priceSlider.fetchRanges ? aggregations.agg_min_price.value : priceSlider.constRanges.min,
+        max: priceSlider.fetchRanges ? aggregations.agg_max_price.value : priceSlider.constRanges.max
       })
 
       commit(PRICE_RANGES_MUTATION, ranges)
@@ -161,6 +161,9 @@ const categoryNextGetters = {
   }
 }
 
-export const CustomPriceSelector: StorefrontModule = async () => {
+export const CustomPriceSlider: StorefrontModule = async () => {
   extendStore('category-next', categoryNextGetters)
+  if (!priceSlider.fetchRanges && !priceSlider.constRanges) {
+    console.error('[VSF] Price Slider module not configured! Please check readme and fix it.')
+  }
 }
