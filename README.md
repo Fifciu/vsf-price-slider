@@ -10,5 +10,6 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [x] Prepare max & min aggregations
 - [x] Aggregations for max & min should be independent from applied price filter
 - [ ] Write unit tests
-- [ ] Fix for changing max/min value when value exceeds
+- [x] Fix for changing max/min value when value exceeds (partial fix)
 - [ ] Make aggregations min max optional (also in storefront-query-builder)
+- [ ] Rename to price slider
