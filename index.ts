@@ -7,6 +7,7 @@ import * as types from '@vue-storefront/core/modules/catalog-next/store/category
 import omit from 'lodash-es/omit';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { products, entities } from 'config'
+import { priceSliderHooksExecutors } from './hooks';
 const PRICE_RANGES_MUTATION = 'PRICE_RANGES_MUTATION';
 
 const getFiltersFromQuery = ({ filtersQuery = {}, availableFilters = {} } = {}): { filters: Filters } => {
@@ -129,10 +130,13 @@ const categoryNextGetters = {
         resultFilters = Object.assign(cloneDeep(categoryMappedFilters), cloneDeep(omit(aggregationFilters, filtersKeys)))
       }
       commit(types.CATEGORY_SET_CATEGORY_FILTERS, { category, filters: resultFilters })
-      commit(PRICE_RANGES_MUTATION, {
+      const ranges = priceSliderHooksExecutors.beforeSetRanges({
         min: aggregations.agg_min_price.value,
         max: aggregations.agg_max_price.value
       })
+
+      commit(PRICE_RANGES_MUTATION, ranges)
+      priceSliderHooksExecutors.afterSetRanges(ranges)
     }
   },
   mutations: {
