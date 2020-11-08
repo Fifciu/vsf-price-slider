@@ -42,36 +42,5 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     ])
     await this.$nextTick();
     this[wrapperKey].initialSetupDone = true;
-  },
-
-  mounted () {
-    priceSliderHooks.beforeSetRanges(({ min, max }) => {
-      // mem leak?
-      let values = [
-        null,
-        null
-      ];
-
-      if (min > this[wrapperKey].values[0]) {
-        values[0] = min;
-      }
-
-      if (max < this[wrapperKey].values[1]) {
-        values[1] = max;
-      }
-
-      if (values[0] !== null || values[1] !== null) {
-        this[wrapperKey].initialSetupDone = false;
-        this.$set(this[wrapperKey], 'values', [
-          values[0] || this.minAvailablePrice,
-          values[1] || this.maxAvailablePrice
-        ])
-      }
-
-      return {
-        min,
-        max
-      }
-    })
   }
 })

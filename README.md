@@ -13,3 +13,22 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [x] Fix for changing max/min value when value exceeds (partial fix)
 - [ ] Make aggregations min max optional (also in storefront-query-builder)
 - [ ] Rename to price slider
+
+## Config
+config.priceSlider.fetchRanges
+```js
+"priceSlider": {
+    "fetchRanges": true
+}
+```
+
+config.priceSlider.constRanges
+```js
+"priceSlider": {
+    "fetchRanges": false,
+    "constRanges": {
+        "min": 0,
+        "max": 1000
+    }
+}
+```
