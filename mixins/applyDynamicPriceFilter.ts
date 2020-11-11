@@ -1,5 +1,4 @@
 import buildFilterPriceVariant from '../helpers/buildFilterPriceVariant';
-import { priceSliderHooks } from '../hooks';
 
 export default (wrapperKey: string = 'dynamicPrice') => ({
   data () {
