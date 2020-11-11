@@ -1,7 +1,7 @@
 {
-  "name": "vsf-price-selector",
+  "name": "vsf-price-slider",
   "version": "1.0.0",
-  "description": "Dynamic price selector for Vue Storefront 1.12+",
+  "description": "Dynamic price slider for Vue Storefront 1.12+",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
