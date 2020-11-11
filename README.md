@@ -11,9 +11,8 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [x] Aggregations for max & min should be independent from applied price filter
 - [ ] Write unit tests
 - [x] Fix for changing max/min value when value exceeds (partial fix)
-- [ ] Make aggregations min max optional (also in storefront-query-builder)
+- [x] Make aggregations min max optional (also in storefront-query-builder)
 - [x] Rename to price slider
-- [ ] Make vue slider component lazy
 
 ## Config
 config.priceSlider.fetchRanges
