@@ -35,10 +35,18 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     }
   },
   async created () {
-    this.$set(this[wrapperKey], 'values', [
-      this.minAvailablePrice,
-      this.maxAvailablePrice
-    ])
+    if (this.$route.query.hasOwnProperty('price')) {
+      const currentPrices = this.$route.query.price.split('-')
+      this.$set(this[wrapperKey], 'values', [
+        currentPrices[0],
+        currentPrices[1]
+      ])
+    } else {
+      this.$set(this[wrapperKey], 'values', [
+        this.minAvailablePrice,
+        this.maxAvailablePrice
+      ])
+    }
     await this.$nextTick();
     this[wrapperKey].initialSetupDone = true;
   }
