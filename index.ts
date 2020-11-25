@@ -10,7 +10,7 @@ export const CustomPriceSlider: StorefrontModule = async () => {
     return
   }
 
-  if (priceSlider.fetchRanges && (!products.aggregate.minPrice || !products.aggregate.maxPrice)) {
+  if (priceSlider.constRanges && (!products.aggregate.minPrice || !products.aggregate.maxPrice)) {
     console.error('[VSF] Price Slider module with fetchRanges requires products.aggregate.minPrice and products.aggregate.maxPrice to be true')
     return
   }
