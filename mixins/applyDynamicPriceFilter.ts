@@ -35,7 +35,7 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     }
   },
   async created () {
-    if (this.$route.query.hasOwnProperty('price')) {
+    if (this.$route.query.price) {
       const currentPrices = this.$route.query.price.split('-')
       this.$set(this[wrapperKey], 'values', [
         currentPrices[0],
