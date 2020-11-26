@@ -8,6 +8,6 @@ export default (from: string, to: string): FilterVariant => {
     from,
     to,
     id: `${from}-${to}`,
-    label: `${price(from)} - ${to}`
+    label: `${price(from)} - ${price(to)}`
   }
 };
