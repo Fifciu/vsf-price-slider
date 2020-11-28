@@ -14,21 +14,33 @@ VSF 1.12+ (or maybe 1.11.5+?)
 - [x] Make aggregations min max optional (also in storefront-query-builder)
 - [x] Rename to price slider
 
+
+## How to install
+1. Clone repository to `src/modules`
+2. Register module in `src/modules/client.ts`
+3. Make sure you are using the newest version of `storefront-query-builder`
+4. Configure
+
 ## Config
-config.priceSlider.fetchRanges
+### Dynamicly calculated ranges
 ```js
 "priceSlider": {
     "fetchRanges": true
 }
 ```
 
-config.priceSlider.constRanges
+### Hardcoded ranges
 ```js
 "priceSlider": {
     "fetchRanges": false,
-    "constRanges": {
-        "min": 0,
-        "max": 1000
-    }
+    "constRanges": true
+}
+```
+
+And to `config.products` add:
+```js
+"aggregate": {
+    "minPrice": 0,
+    "maxPrice": 2000
 }
 ```
