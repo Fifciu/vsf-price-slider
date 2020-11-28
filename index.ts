@@ -4,8 +4,8 @@ import { products, priceSlider } from 'config'
 
 import { categoryNextModule } from './store/category-next'
 
-export const CustomPriceSlider: StorefrontModule = async () => {
-  if (!priceSlider.fetchRanges && !priceSlider.constRanges) {
+export const CustomPriceSlider: StorefrontModule = () => {
+  if (!priceSlider || (!priceSlider.fetchRanges && !priceSlider.constRanges)) {
     console.error('[VSF] Price Slider module not configured! Please check readme and fix it.')
     return
   }
