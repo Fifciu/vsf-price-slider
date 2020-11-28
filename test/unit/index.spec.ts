@@ -46,6 +46,22 @@ describe('[VSF-Price-Slider] CustomPriceSlider', () => {
         expect(consoleLogMock.error).toHaveBeenCalled();
     });
 
+    it('logs and returns if constRanges not fully configured - second part of the condition', () => {
+        config.priceSlider = {
+            constRanges: true
+        }
+
+        config.products = {
+            aggregate: {
+                minPrice: 23
+            }
+        }
+
+        CustomPriceSlider({} as any);
+
+        expect(consoleLogMock.error).toHaveBeenCalled();
+    });
+
     it('extends store if fetchRanges enabled', () => {
         config.priceSlider = {
             fetchRanges: true
