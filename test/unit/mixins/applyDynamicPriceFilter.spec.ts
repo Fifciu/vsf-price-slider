@@ -5,7 +5,7 @@ const builtPriceVariant = 'builtPriceVariant';
 
 jest.mock('../../../helpers/buildFilterPriceVariant', () => jest.fn(() => builtPriceVariant))
 
-describe('applyDynamicPriceFilter', () => {
+describe('[VSF-Price-Slider] applyDynamicPriceFilter', () => {
   const key = 'dynamicPrice';
   const mixin = applyDynamicPriceFilter(key);
 
@@ -66,6 +66,9 @@ describe('applyDynamicPriceFilter', () => {
               }
             }
           }
+        },
+        $route: {
+          query: {}
         }
       },
       methods: {
@@ -96,6 +99,9 @@ describe('applyDynamicPriceFilter', () => {
               }
             }
           }
+        },
+        $route: {
+          query: {}
         }
       }
     });
@@ -120,6 +126,9 @@ describe('applyDynamicPriceFilter', () => {
               }
             }
           }
+        },
+        $route: {
+          query: {}
         }
       },
       methods: {
@@ -141,5 +150,44 @@ describe('applyDynamicPriceFilter', () => {
     await wrapper.vm.$nextTick();
 
     expect(applyFilter).toHaveBeenCalled()
+  })
+
+  it('sets min & max from route if exists', async () => {
+    const min = 10;
+    const max = 25
+
+    const routeMin = 15;
+    const routeMax = 28;
+    const applyFilter = jest.fn();
+
+    const wrapper = shallowMount(TestComponent, {
+      mocks: {
+        $store: {
+          state: {
+            'category-next': {
+              dynamicPriceRanges: {
+                min,
+                max
+              }
+            }
+          }
+        },
+        $route: {
+          query: {
+            price: `${routeMin}-${routeMax}`
+          }
+        }
+      },
+      methods: {
+        applyFilter
+      }
+    });
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm[key].initialSetupDone).toBe(true)
+    expect(wrapper.vm[key].values[0]).toBe(routeMin)
+    expect(wrapper.vm[key].values[1]).toBe(routeMax)
+    expect(applyFilter).not.toHaveBeenCalled()
   })
 })

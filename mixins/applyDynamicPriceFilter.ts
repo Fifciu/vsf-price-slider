@@ -38,8 +38,8 @@ export default (wrapperKey: string = 'dynamicPrice') => ({
     if (this.$route.query.price) {
       const currentPrices = this.$route.query.price.split('-')
       this.$set(this[wrapperKey], 'values', [
-        currentPrices[0],
-        currentPrices[1]
+        Number(currentPrices[0]),
+        Number(currentPrices[1])
       ])
     } else {
       this.$set(this[wrapperKey], 'values', [

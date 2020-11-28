@@ -4,7 +4,7 @@ jest.mock('@vue-storefront/core/filters/price', () => ({
   price: jest.fn(pr => `af--${pr}`)
 }))
 
-describe('buildFilterPriceVariant', () => {
+describe('[VSF-Price-Slider] buildFilterPriceVariant', () => {
 
   it('returns FilterVariant object', () => {
     const from = '10';
@@ -15,7 +15,7 @@ describe('buildFilterPriceVariant', () => {
       from,
       to,
       id: `${from}-${to}`,
-      label: `af--${from} - ${to}`
+      label: `af--${from} - af--${to}`
     }
 
     const filterVariant = buildFilterPriceVariant(from, to);
