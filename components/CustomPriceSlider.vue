@@ -3,8 +3,8 @@
     <h2>Price Selector</h2>
       <vue-slider
         v-model="dynamicPrice.values"
-        :min="Math.min(minAvailablePrice, dynamicPrice.values[0])"
-        :max="Math.max(maxAvailablePrice, dynamicPrice.values[1])"
+        :min="Math.round(Math.min(minAvailablePrice, dynamicPrice.values[0]))"
+        :max="Math.round(Math.max(maxAvailablePrice, dynamicPrice.values[1]))"
         lazy
       />
   </div>
